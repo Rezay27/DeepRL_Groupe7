@@ -27,11 +27,11 @@ public class GridWorldPolicyIteration : MonoBehaviour
                        break; 
 
                     case MapGenerator.Case.Goal:
-                       mapState[x].Add(new FinalCase());
+                       mapState[x].Add(new FinalGoal());
                        break; 
 
                     case MapGenerator.Case.Obstacle:
-                       mapState[x].Add(new Wall());
+                       mapState[x].Add(new Frobidden());
                        break; 
                 }
             }

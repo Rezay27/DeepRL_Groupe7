@@ -54,8 +54,9 @@ public class PolicyIteration
 
                     float tmp = mapState[x][y].reward + mapState[nextState.x][nextState.y].score * gamma; 
 
-                    if(tmp > bestScore)
+                    if(tmp > bestScore || first == true)
                     {
+                        first = false;
                         bestScore = tmp;
                         bestAction = a;
                     }

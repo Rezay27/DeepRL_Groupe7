@@ -5,22 +5,19 @@ using UnityEngine;
 using AI_Utils;
 using Action = AI_Utils.Action;
 
-public class ValueIteration : MonoBehaviour
+public class ValueIteration 
 {
-    public MapGenerator _mapGenerator;
-    public List<List<GameObject>> ListeBloc = new List<List<GameObject>>();
-    
-    public void Start()
-    {
-        ListeBloc = _mapGenerator.blocs;
-        Debug.Log(ListeBloc.Count);
-       
-    }
-    
     // algorithme de Value Iteration
-    static public void ValueIterationAlgorithm(ref List<List<State>> mapState)
+    static void ValueIterationAlgorithm(ref List<List<State>> mapState)
     {
         float delta = float.MinValue;
+        for (int x = 0; x < mapState.Count; x++)
+        {
+            for (int y = 0; y < mapState[x].Count; y++)
+            {
+                mapState[x][y].score = 0;
+            }
+        }
         //On boucle pour minimiser la valeur de Delta   
         do
         {
