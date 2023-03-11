@@ -40,7 +40,7 @@ public class QLearning
           {
              // On exectue l'action initiale
 
-             IntList nextStateCoord = curentState.Value.actions[currentAction].Act(curentState.Key);
+             IntList nextStateCoord = curentState.Value.actions[currentAction].Act(curentState.Key, false);
              State nextState = mapState[nextStateCoord];
 
 

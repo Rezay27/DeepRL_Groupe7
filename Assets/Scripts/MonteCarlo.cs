@@ -91,7 +91,7 @@ public class MonteCarlo : MonoBehaviour
                 actionTaken.Add(action);
                 mapState[currentState].visited[action]++;
 
-                currentState = mapState[currentState].actions[action].Act(currentState);
+                currentState = mapState[currentState].actions[action].Act(currentState, false);
             }
 
             //Retropropagation

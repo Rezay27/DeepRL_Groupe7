@@ -281,7 +281,7 @@ public class MapGenerator : MonoBehaviour
 
     public void AddAction(IntList key, AI_Utils.Action action, Dictionary<IntList, State> mapState, in Case[,] mapCase)
     {
-        IntList newKey = action.Act(key);
+        IntList newKey = action.Act(key, false);
 
         //Check that everything is in bound of the map
         for(int i = 0; i < key.Count; i+=2)

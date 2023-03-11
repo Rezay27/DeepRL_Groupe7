@@ -40,7 +40,7 @@ public class SARSA
           {
              // On exectue l'action initiale
 
-             IntList nextStateCoord = curentState.Value.actions[currentAction].Act(curentState.Key);
+             IntList nextStateCoord = curentState.Value.actions[currentAction].Act(curentState.Key, false);
              State nextState = mapState[nextStateCoord];
 
 
@@ -107,7 +107,7 @@ public class SARSA
 
           for (int i = 1; i < actuState.actions.Count; i++)
           {
-             IntList nextStateCoordonee = actuState.actions[i].Act(Xy);
+             IntList nextStateCoordonee = actuState.actions[i].Act(Xy, false);
              State nextState = mapState[nextStateCoordonee];
 
              if (nextState.actions[nextState.currentAction].q > bestScore)

@@ -11,12 +11,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float awaitTimer;
 
     private float _timer;
-    
+
+    public static GameManager Instance;
     //AI
     private Dictionary<IntList, State> _mapState;
     private IntList currentState;
     // MAP
-    private List<List<Bloc>> _mapBlocs;
+    public List<List<Bloc>> _mapBlocs;
     private MapGenerator.Case[,] _map;
     enum AlgoApply
     {
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         _mapState = new Dictionary<IntList, State>();
         _mapBlocs = new List<List<Bloc>>();
+        Instance = this;
     }
     
     void Start()
@@ -101,6 +103,6 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        currentState = current.actions[current.currentAction].Act(currentState);
+        currentState = current.actions[current.currentAction].Act(currentState, true);
     }
 }

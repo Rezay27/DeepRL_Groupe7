@@ -20,7 +20,7 @@ public class PolicyIteration
                 {
                     kvp.Value.futureScore = kvp.Value.reward;
                 }else{
-                    IntList nextState = kvp.Value.actions[kvp.Value.currentAction].Act(kvp.Key);
+                    IntList nextState = kvp.Value.actions[kvp.Value.currentAction].Act(kvp.Key, false);
 
                     kvp.Value.futureScore = kvp.Value.reward + mapState[nextState].score * gamma;
                 }
@@ -48,7 +48,7 @@ public class PolicyIteration
 
             for(int a = 0; a < kvp.Value.actions.Count; a++)
             {
-                IntList nextState = kvp.Value.actions[a].Act(kvp.Key);
+                IntList nextState = kvp.Value.actions[a].Act(kvp.Key, false);
 
                 float tmp = kvp.Value.reward + mapState[nextState].score * gamma; 
 

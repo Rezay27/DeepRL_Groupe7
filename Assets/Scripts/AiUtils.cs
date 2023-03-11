@@ -72,9 +72,9 @@ namespace AI_Utils
     {
         public abstract string GetId();
 
-        public abstract IntList Act(in IntList id);
+        public abstract IntList Act(in IntList id, bool real);
         
-        static public IntList Move(in IntList id, Vector2Int dir)
+        static public IntList Move(in IntList id, Vector2Int dir, bool real)
         {
             IntList newId = new IntList(id);
 
@@ -84,8 +84,13 @@ namespace AI_Utils
             //Push the crates
             for(int i = 2; i < newId.Count; i+=2)
             {
+                
                 if(newId[0] == newId[i] && newId[1] == newId[i+1])
                 {
+                    if(real){
+                        BlocCrate crate = GameManager.Instance._mapBlocs[newId[i]][newId[i+1]] as BlocCrate;
+                        GameManager.Instance._mapBlocs = crate.move(GameManager.Instance._mapBlocs,new Vector2Int(newId[i],newId[i+1]), dir);
+                    }
                     newId[i] += dir.x;
                     newId[i+1] += dir.y;
                 }
@@ -107,9 +112,9 @@ namespace AI_Utils
             return "right";
         }
 
-        public override IntList Act(in IntList id)
+        public override IntList Act(in IntList id, bool real)
         {
-            return Move(id, new Vector2Int(1, 0));
+            return Move(id, new Vector2Int(1, 0), real);
         }
     }
 
@@ -120,9 +125,9 @@ namespace AI_Utils
             return "left";
         }
 
-        public override IntList Act(in IntList id)
+        public override IntList Act(in IntList id, bool real)
         {
-            return Move(id, new Vector2Int(-1, 0));
+            return Move(id, new Vector2Int(-1, 0), real);
         }
     }
 
@@ -133,9 +138,9 @@ namespace AI_Utils
             return "up";
         }
 
-        public override IntList Act(in IntList id)
+        public override IntList Act(in IntList id, bool real)
         {
-            return Move(id, new Vector2Int(0, 1));
+            return Move(id, new Vector2Int(0, 1), real);
         }
     }
 
@@ -146,9 +151,9 @@ namespace AI_Utils
             return "down";
         }
 
-        public override IntList Act(in IntList id)
+        public override IntList Act(in IntList id, bool real)
         {
-            return Move(id, new Vector2Int(0, -1));
+            return Move(id, new Vector2Int(0, -1), real);
         }
     }
 }

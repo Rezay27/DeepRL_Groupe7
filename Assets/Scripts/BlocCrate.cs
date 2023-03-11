@@ -11,8 +11,8 @@ public class BlocCrate : Bloc
     public Bloc blocUnderMe;
     public bool onTarget=false;
     private bool alreadyMoved = false;
-    public Color onTargetColor= Color.magenta;
-    public Color notOnTargetColor = new Color(90, 46, 18);
+    private Color onTargetColor= Color.magenta;
+    private Color notOnTargetColor = new Color(90, 46, 18);
     
     //Check if it's possible to move to new position
     //Take the gameObject list of blocs, the position of the crate on the grid

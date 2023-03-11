@@ -34,7 +34,7 @@ public class ValueIteration
 
                     for (int a = 0; a < kvp.Value.actions.Count; a++)
                     {
-                        nextState = kvp.Value.actions[a].Act(kvp.Key);
+                        nextState = kvp.Value.actions[a].Act(kvp.Key, false);
 
                         float tmp = kvp.Value.reward + mapState[nextState].score * gamma;
 
@@ -68,7 +68,7 @@ public class ValueIteration
 
              for(int a = 0; a < kvp.Value.actions.Count; a++)
              {
-                 IntList nextState = kvp.Value.actions[a].Act(kvp.Key);
+                 IntList nextState = kvp.Value.actions[a].Act(kvp.Key, false);
 
                  float tmp = kvp.Value.reward + mapState[nextState].score * gamma; 
 
