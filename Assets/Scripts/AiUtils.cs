@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Utils;
+
 namespace AI_Utils
 {
 
@@ -10,45 +12,55 @@ namespace AI_Utils
         public List<Action> actions = new List<Action>();
         public float score = 0;
         public float futureScore = 0;
-        public int currentAction;
+        public int currentAction = 0;
         public float reward = 0;
         public bool final = false;
+        public bool start = false;
 
         //For MonteCarlo
-        public int visited = 0;//Counts the number of time this state was visited in a episode
+        public List<int> visited = new List<int>();//Counts the number of time this state was visited in a episode
         public List<float> totalScore = new List<float>();//Score accumulated by exploitation and exploartion pour chaque action
         public List<float> timePlayed = new List<float>();
+
+        public List<float> vs = new List<float>();//V(s)
+
+        public void AddAction(Action a)
+        {
+            actions.Add(a);
+            totalScore.Add(0);
+            timePlayed.Add(0);
+            visited.Add(0);
+            vs.Add(0);
+        }
+
+        public abstract string GetId();
+        
+        //For SARSA
+
+        public MapGenerator.Case typeBlock; 
+
     }
 
-    public class Gridcase: State
+    public class StandardState: State
     {
-        public Gridcase()
+        public override string GetId()
         {
-            actions.Add(new Right());
-            actions.Add(new Left());
-            actions.Add(new Down());
-            actions.Add(new Up());
+            return "StandardState";
+        }
 
-            for(int i = 0; i < 4; i++)
-            {
-                totalScore.Add(0);
-                timePlayed.Add(0);
-            }
-
+        public StandardState()
+        {
             currentAction = Random.Range(0, actions.Count);
         }
     }
 
-    public class StepGoal: Gridcase
+    public class FinalGoal: StandardState
     {
-        public StepGoal()
+        public override string GetId()
         {
-            reward = 1;
+            return "FinalGoal";
         }
-    }
 
-    public class FinalGoal: Gridcase
-    {
         public FinalGoal()
         {
             reward = 10;
@@ -56,25 +68,36 @@ namespace AI_Utils
         }
     }
 
-    public class Frobidden: Gridcase
-    {
-        public Frobidden()
-        {
-            reward = -100;
-            final = true;
-        }
-    }
-
-
     public abstract class Action
     {
         public abstract string GetId();
 
-        public abstract Vector2Int Act(Vector2Int id);
+        public abstract IntList Act(in IntList id);
         
+        static public IntList Move(in IntList id, Vector2Int dir)
+        {
+            IntList newId = new IntList(id);
+
+            newId[0] += dir.x;
+            newId[1] += dir.y;
+
+            //Push the crates
+            for(int i = 2; i < newId.Count; i+=2)
+            {
+                if(newId[0] == newId[i] && newId[1] == newId[i+1])
+                {
+                    newId[i] += dir.x;
+                    newId[i+1] += dir.y;
+                }
+            }
+
+            return newId;
+        }
+
+
         //For SARSA
 
-        public float q;
+        public float q = 0;
     }
 
     public class Right: Action
@@ -84,10 +107,9 @@ namespace AI_Utils
             return "right";
         }
 
-        public override Vector2Int Act(Vector2Int id)
+        public override IntList Act(in IntList id)
         {
-            id.x++;
-            return id;
+            return Move(id, new Vector2Int(1, 0));
         }
     }
 
@@ -98,10 +120,9 @@ namespace AI_Utils
             return "left";
         }
 
-        public override Vector2Int Act(Vector2Int id)
+        public override IntList Act(in IntList id)
         {
-            id.x--;
-            return id;
+            return Move(id, new Vector2Int(-1, 0));
         }
     }
 
@@ -112,10 +133,9 @@ namespace AI_Utils
             return "up";
         }
 
-        public override Vector2Int Act(Vector2Int id)
+        public override IntList Act(in IntList id)
         {
-            id.y++;
-            return id;
+            return Move(id, new Vector2Int(0, 1));
         }
     }
 
@@ -126,11 +146,9 @@ namespace AI_Utils
             return "down";
         }
 
-        public override Vector2Int Act(Vector2Int id)
+        public override IntList Act(in IntList id)
         {
-            id.y--;
-            return id;
+            return Move(id, new Vector2Int(0, -1));
         }
     }
-
 }

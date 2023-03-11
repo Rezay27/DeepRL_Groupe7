@@ -4,68 +4,83 @@ using System.Collections.Generic;
 using UnityEngine;
 using AI_Utils;
 using Action = AI_Utils.Action;
+using Utils;
 
 public class ValueIteration 
 {
     // algorithme de Value Iteration
-    static void ValueIterationAlgorithm(ref List<List<State>> mapState)
+    public static void ValueIterationAlgorithm(ref Dictionary<IntList, State> mapState, float theta, float gamma)
     {
-        float delta = float.MinValue;
-        for (int x = 0; x < mapState.Count; x++)
-        {
-            for (int y = 0; y < mapState[x].Count; y++)
-            {
-                mapState[x][y].score = 0;
-            }
-        }
-        //On boucle pour minimiser la valeur de Delta   
-        do
-        {
-            for (int x = 0; x < mapState.Count; x++)
-            {
-                for (int y = 0; y < mapState[x].Count; y++)
+         float delta = 0;
+
+         foreach (var kvp in mapState)
+         {
+                kvp.Value.score = 0;
+         }
+         do
+         {
+             foreach (KeyValuePair<IntList, State> kvp in mapState)
+             {
+                 if(kvp.Value.final == true || kvp.Value.actions.Count == 0)
+                {
+                    kvp.Value.futureScore = kvp.Value.reward + kvp.Value.score * gamma;
+                }
+                else
                 {
                     float maxA = -1;
                     int indexActionSelected = -1;
-                    Vector2Int nextState = mapState[x][y].actions[mapState[x][y].currentAction].Act(new Vector2Int(x, y));
-                    foreach (var actions in mapState[x][y].actions)
+
+                    IntList nextState = new IntList();
+
+                    for (int a = 0; a < kvp.Value.actions.Count; a++)
                     {
-                        float tmp = mapState[x][y].reward + mapState[nextState.x][nextState.y].score * 0.5f;
+                        nextState = kvp.Value.actions[a].Act(kvp.Key);
+
+                        float tmp = kvp.Value.reward + mapState[nextState].score * gamma;
+
                         if (maxA < tmp)
                         {
                             maxA = tmp;
-                            indexActionSelected = mapState[x][y].actions.IndexOf(actions);
+                            indexActionSelected = a;
                         }
                     }
-                    mapState[x][y].futureScore = maxA;
-                    mapState[x][y].currentAction = indexActionSelected;
-                    delta = Mathf.Max(delta, mapState[x][y].score - mapState[x][y].futureScore);
+
+                    kvp.Value.futureScore = maxA;
+                    kvp.Value.currentAction = indexActionSelected;
+
+                    delta = Mathf.Max(delta, Mathf.Abs(kvp.Value.score - kvp.Value.futureScore));
                 }
-            }
-        } while (delta <0);
-        // On créer le chemin avec les meilleurs actions 
-        for(int x = 0; x < mapState.Count; x++)
-        {
-            for(int y = 0; y < mapState[x].Count; y++)
-            {
-                int bestAction = 0;
-                float bestScore = 0;
+             }
 
-                for(int a = 0; a < mapState[x][y].actions.Count; a++)
-                {
-                    Vector2Int nextState = mapState[x][y].actions[a].Act(new Vector2Int(x, y));
+            foreach (KeyValuePair<IntList, State> kvp in mapState)
+             {
+                kvp.Value.score = kvp.Value.futureScore;
+             }
 
-                    float tmp = mapState[x][y].reward + mapState[nextState.x][nextState.y].score * 0.5f; 
+         } while (delta < theta);
+         
+         // On créer le chemin avec les meilleurs actions 
+         foreach (KeyValuePair<IntList, State> kvp in mapState)
+         {
 
-                    if(tmp > bestScore)
-                    {
-                        bestScore = tmp;
-                        bestAction = a;
-                    }
-                }
-                mapState[x][y].currentAction = bestAction;
-            }
-        }
-        
+             int bestAction = 0;
+             float bestScore = -1;
+
+             for(int a = 0; a < kvp.Value.actions.Count; a++)
+             {
+                 IntList nextState = kvp.Value.actions[a].Act(kvp.Key);
+
+                 float tmp = kvp.Value.reward + mapState[nextState].score * gamma; 
+
+                 if(tmp > bestScore)
+                 {
+                     bestScore = tmp;
+                     bestAction = a;
+                 }
+             } 
+             
+             kvp.Value.currentAction = bestAction;
+             //Debug.Log("best action : " + kvp.Value.actions[bestAction].GetId());
+         }
     }
 }

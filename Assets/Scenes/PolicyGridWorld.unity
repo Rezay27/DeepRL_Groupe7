@@ -345,7 +345,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38a8ec7e12534234aac26a1682829760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: {x: 4, y: 4}
+  xVal: 0
+  yVal: 0
   blocsPrefab:
   - {fileID: 7782408288440035336, guid: e50c931e4bfbe3848b5f13534f7a9c10, type: 3}
   - {fileID: 7782408288440035336, guid: 262d4aeecd67d5f49a52015487ce8d64, type: 3}
@@ -357,8 +358,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1c3245e0c0150474abd801024206eb69, type: 2}
   - {fileID: 11400000, guid: 7c06ab8507c8b9142b9ffe9c5c2f52f4, type: 2}
   - {fileID: 11400000, guid: 23eb863f98145ff4cb03e33299131e8f, type: 2}
-  usedMapId: 0
+  - {fileID: 11400000, guid: 23cd8d2879d130b4780e9d5f1e29dc74, type: 2}
+  - {fileID: 11400000, guid: ea486bc8a5c2242459334d699f0e283f, type: 2}
+  usedMapId: 4
   useMap: 1
+  startPosition: {x: 0, y: 0}
 --- !u!1 &1368697368
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,6 +373,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1368697370}
   - component: {fileID: 1368697369}
+  - component: {fileID: 1368697372}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -389,7 +394,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 6474197474374072980, guid: e69316e3852045c4c8701344ea78f323, type: 3}
-  pos: {x: 0, y: 0}
 --- !u!4 &1368697370
 Transform:
   m_ObjectHideFlags: 0
@@ -405,3 +409,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1368697372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368697368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cad5d1abdbd528498b3c9606b2d29c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1368697369}
+  mapGenerator: {fileID: 1208316254}
+  selectedAlgorithm: 4
+  awaitTimer: 0.25

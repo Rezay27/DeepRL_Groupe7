@@ -10,8 +10,10 @@ public class BlocCrate : Bloc
     public GameObject blocUnderMeGO;
     public Bloc blocUnderMe;
     public bool onTarget=false;
-    public GameObject prefabTarget;
     private bool alreadyMoved = false;
+    public Color onTargetColor= Color.magenta;
+    public Color notOnTargetColor = new Color(90, 46, 18);
+    
     //Check if it's possible to move to new position
     //Take the gameObject list of blocs, the position of the crate on the grid
     //And the direction you want to move it (example:(0,1) to move up)
@@ -51,13 +53,15 @@ public class BlocCrate : Bloc
         gridData[pos.x][pos.y]=blocUnderMe;
         //Getting the new bloc under me and remembering it
         blocUnderMe=gridData[newPos.x][newPos.y];
-        if (blocUnderMe.ID == 5)
+        if (blocUnderMe.ID == (int)MapGenerator.Case.TargetCrate)
         {
             onTarget = true;
+            ChangeColor();
         }
         else
         {
             onTarget = false;
+            ChangeColor();
         }
         //Putting myself at my new position on the grid
         gridData[newPos.x][newPos.y] = this;
@@ -65,5 +69,11 @@ public class BlocCrate : Bloc
         myGo.transform.position = new Vector3(newPos.x, 0, newPos.y);
         //returning the updated grid
         return gridData;
+    }
+
+    public void ChangeColor()
+    {
+        if (onTarget) myGo.GetComponent<MeshRenderer>().material.color = onTargetColor;
+        else myGo.GetComponent<MeshRenderer>().material.color = notOnTargetColor;
     }
 }

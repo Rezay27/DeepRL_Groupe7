@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: MapData
   m_EditorClassIdentifier: 
   mapSize: {x: 4, y: 4}
-  blocId: []
+  blocId:
+  - ligne: 0000000000000000
+  - ligne: 
+  - ligne: 

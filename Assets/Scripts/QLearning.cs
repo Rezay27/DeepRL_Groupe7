@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AI_Utils;
-
 using Utils;
 
-public class SARSA 
+public class QLearning  
 {
-  public static void SarsaAlgorithm(ref Dictionary<IntList, State> mapState ,  float gamma ,int nbEpisode, float epsilon, float tauxDapprentissage)
+   public static void Qlearning(ref Dictionary<IntList, State> mapState, float gamma, int nbEpisode, float epsilon,
+      float tauxDapprentissage)
    {
       
-      //Initialisation des valeurs de Q(s,a) à 0 
+     //Initialisation des valeurs de Q(s,a) à 0 
       foreach (KeyValuePair<IntList,State> state in mapState)
       { 
          foreach (var action in state.Value.actions)
@@ -32,7 +32,7 @@ public class SARSA
              }
           }
           
-          int currentAction = EpsilonGreedy(mapState,xy,epsilon);
+          int currentAction = SARSA.EpsilonGreedy(mapState,xy,epsilon);
           int iteration = 0;
 
 
@@ -46,22 +46,24 @@ public class SARSA
 
              // On utilise l'algo d'exploration/exploitation 
              xy = nextStateCoord;
-             int nextAction = EpsilonGreedy(mapState, xy, epsilon);
-
-             //mise a jour de Q(s,a)
-
+             int nextAction = SARSA.EpsilonGreedy(mapState, xy, epsilon);
+            
              float currentQ = curentState.Value.actions[currentAction].q;
-             Debug.Log("nextState.actions.count : " + nextState.actions.Count);
-             Debug.Log("nextAction : " + nextAction);
-             float nextQ = nextState.actions[nextAction].q;
+             float maxnextQ = 0;
+
+             foreach (var action in  nextState.actions)
+             {
+                maxnextQ = Mathf.Max(maxnextQ, action.q);
+             }
+             
              float reward = curentState.Value.reward;
              curentState.Value.actions[currentAction].q =
-                currentQ + tauxDapprentissage * (reward + gamma * nextQ - currentQ);
+                currentQ + tauxDapprentissage * (reward + gamma * maxnextQ - currentQ);
 
              mapState[curentState.Key].currentAction = currentAction;
              curentState = new KeyValuePair<IntList, State>(nextStateCoord, nextState);
              currentAction = nextAction;
-
+            
              iteration++;
              
           } while ( iteration <= 100);
@@ -83,40 +85,6 @@ public class SARSA
              }
           }
           kvp.Value.currentAction = bestAction;
-       }
-      
-   }
-
-   // Algorithme d'exploration / exploitation
-   public static int EpsilonGreedy(Dictionary<IntList, State> mapState,IntList Xy, float epsilon)
-   {
-      State actuState = mapState[Xy];
-       if (Random.Range(0f, 1f) < epsilon)
-       {
-          //Exploration
-          Debug.Log("explore");
-          return Random.Range(0, actuState.actions.Count);
-       }
-       else
-       {
-         Debug.Log("exploit");
-
-          // Exploitation
-          float bestScore = mapState[Xy].actions[0].q;
-          int bestAction = 0;
-
-          for (int i = 1; i < actuState.actions.Count; i++)
-          {
-             IntList nextStateCoordonee = actuState.actions[i].Act(Xy);
-             State nextState = mapState[nextStateCoordonee];
-
-             if (nextState.actions[nextState.currentAction].q > bestScore)
-             {
-                bestScore = nextState.actions[nextState.currentAction].q;
-                bestAction = i;
-             }
-          }
-          return bestAction;
        }
    }
 }
