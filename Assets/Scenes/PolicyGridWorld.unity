@@ -360,7 +360,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 23eb863f98145ff4cb03e33299131e8f, type: 2}
   - {fileID: 11400000, guid: 23cd8d2879d130b4780e9d5f1e29dc74, type: 2}
   - {fileID: 11400000, guid: ea486bc8a5c2242459334d699f0e283f, type: 2}
-  usedMapId: 2
+  usedMapId: 4
   useMap: 1
   startPosition: {x: 0, y: 0}
 --- !u!1 &1368697368

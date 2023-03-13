@@ -5,7 +5,7 @@ using AI_Utils;
 
 using Utils;
 
-public class SARSA 
+public class SARSA
 {
   public static void SarsaAlgorithm(ref Dictionary<IntList, State> mapState ,  float gamma ,int nbEpisode, float epsilon, float tauxDapprentissage)
    {
@@ -51,8 +51,8 @@ public class SARSA
              //mise a jour de Q(s,a)
 
              float currentQ = curentState.Value.actions[currentAction].q;
-             Debug.Log("nextState.actions.count : " + nextState.actions.Count);
-             Debug.Log("nextAction : " + nextAction);
+             //Debug.Log("nextState.actions.count : " + nextState.actions.Count);
+             //Debug.Log("nextAction : " + nextAction);
              float nextQ = nextState.actions[nextAction].q;
              float reward = curentState.Value.reward;
              curentState.Value.actions[currentAction].q =
@@ -94,14 +94,14 @@ public class SARSA
        if (Random.Range(0f, 1f) < epsilon)
        {
           //Exploration
-          Debug.Log("explore");
+          //Debug.Log("explore");
           return Random.Range(0, actuState.actions.Count);
        }
        else
        {
-         Debug.Log("exploit");
 
           // Exploitation
+          //Debug.Log("exploit");
           float bestScore = mapState[Xy].actions[0].q;
           int bestAction = 0;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AI_Utils;
 using UnityEngine;
@@ -39,7 +40,9 @@ public class GameManager : MonoBehaviour
     {
         int nCrate;
         int nTarget;
-
+        DateTime start;
+        DateTime end;
+        
         _map = new MapGenerator.Case[mapGenerator.xVal, mapGenerator.yVal];
         mapGenerator.GenerateMap(ref _mapBlocs, ref _map, out currentState, out nCrate, out nTarget);
         mapGenerator.GenerateStateMap(ref _mapState, ref _map, nCrate, nTarget);
@@ -47,6 +50,7 @@ public class GameManager : MonoBehaviour
 
         player.Init(new Vector3(mapGenerator.startPosition.x, 1, mapGenerator.startPosition.y));
         
+        start = DateTime.Now;
         switch(selectedAlgorithm)
         {
             case AlgoApply.ValueIterator:
@@ -65,6 +69,9 @@ public class GameManager : MonoBehaviour
                 QLearning.Qlearning(ref _mapState,0.5f,10000,0.4f,0.01f);
                 break;
         }
+        end = DateTime.Now;
+        TimeSpan span = end - start;
+        Debug.Log(span.ToString());
     }
     
     // Update is called once per frame
